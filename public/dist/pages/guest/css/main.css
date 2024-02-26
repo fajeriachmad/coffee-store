@@ -1988,6 +1988,10 @@ h1, h2, h3, h4, h5, h6 {
   text-align: left;
 }
 
+.nav-menu li a:hover {
+  color: #b68834;
+}
+
 /* Nav Menu Arrows */
 .sf-arrows .sf-with-ul {
   padding-right: 30px;
