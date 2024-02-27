@@ -1992,6 +1992,23 @@ h1, h2, h3, h4, h5, h6 {
   color: #b68834;
 }
 
+.nav-menu button {
+  transition: .3s;
+  padding: 10px;
+  color: #333;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: none;
+  outline: none;
+  min-width: 180px;
+  text-align: left;
+}
+
+.nav-menu button:hover {
+  color: #b68834;
+}
+
 /* Nav Menu Arrows */
 .sf-arrows .sf-with-ul {
   padding-right: 30px;

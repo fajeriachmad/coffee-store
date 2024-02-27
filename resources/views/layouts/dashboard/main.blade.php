@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>E-Store | Dashboard</title>
+    <title>Coffee | Dashboard</title>
 
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/trix/trix.css">
     <link rel="stylesheet" type="text/css" href="/dist/pages/dashboard/css/dashboard.css">
 
