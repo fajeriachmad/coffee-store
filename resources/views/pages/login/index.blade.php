@@ -23,21 +23,21 @@
                         </div>
                     @endif
 
-                    <h1 class="h3 mb-3 font-weight-normal text-center">Please login</h1>
+                    <h1 class="h3 mb-3 font-weight-normal text-center">Login</h1>
                     <form class="form-signin" action="/login" method="POST">
                         @csrf
 
-                        <label for="email" class="sr-only">Email address</label>
-                        <input type="email" id="email" name="email"
-                            class="form-control @error('email') is-invalid rounded @enderror" placeholder="Email address"
-                            value="{{ old('email') }}" required autofocus>
+                        <label for="username" class="sr-only">Email address</label>
+                        <input type="text" id="username" name="username"
+                            class="form-control @error('username') is-invalid rounded @enderror" placeholder="username"
+                            value="{{ old('username') }}" required autofocus>
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
 
                         <label for="password" class="sr-only">Password</label>
                         <input type="password" id="password" name="password"
-                            class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
+                            class="form-control @error('password') is-invalid @enderror" placeholder="password" required>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
