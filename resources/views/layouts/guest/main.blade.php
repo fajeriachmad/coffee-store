@@ -53,6 +53,7 @@
     <script src="/assets/js/waypoints/waypoints.min.js"></script>
     <script src="/assets/js/jquery/jquery.counterup.min.js"></script>
     <script src="/assets/js/mail-script/mail-script.js"></script>
+    <script src="/assets/js/feather/feather.min.js"></script>
     <script src="/dist/pages/guest/js/main.js"></script>
 </body>
 

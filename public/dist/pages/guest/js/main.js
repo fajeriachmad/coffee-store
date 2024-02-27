@@ -2,6 +2,8 @@
 $(document).ready(function(){
 	"use strict";
 
+  feather.replace();
+
 	var window_width 	 = $(window).width(),
 	window_height 		 = window.innerHeight,
 	header_height 		 = $(".default-header").height(),
@@ -267,12 +269,4 @@ $(document).ready(function(){
         $(document).ready(function() {
             $('#mc_embed_signup').find('form').ajaxChimp();
         });      
-
-
-
-
-
-
-
-
  });
