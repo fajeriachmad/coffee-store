@@ -1,4 +1,4 @@
-<header id="header" id="home" class="{{ Request::is('login') ? 'header-scrolled' : '' }}">
+<header id="header" id="home" class="{{ Request::is('login', 'register') ? 'header-scrolled' : '' }}">
     <div class="container">
         <div class="row align-items-center justify-content-between d-flex">
             <div id="logo">
