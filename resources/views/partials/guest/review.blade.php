@@ -52,7 +52,7 @@
                 <p>Happy Client</p>
             </div>
             <div class="col-lg-3 col-md-6 single-counter">
-                <h1 class="counter">7562</h1>
+                <h1 class="counter">7563</h1>
                 <p>Total Projects</p>
             </div>
             <div class="col-lg-3 col-md-6 single-counter">
