@@ -3,46 +3,37 @@
         <div class="row d-flex justify-content-center">
             <div class="menu-content pb-60 col-lg-10">
                 <div class="title text-center">
-                    <h1 class="mb-10">What kind of Coffee we serve for you</h1>
-                    <p>Who are in extremely love with eco friendly system.</p>
+                    <h1 class="mb-10">News</h1>
+                    <p>Find about our activities.</p>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-md-6 single-blog">
-                <img class="img-fluid" src="/dist/pages/guest/img/b1.jpg" alt="">
-                <ul class="post-tags">
-                    <li><a href="#">Travel</a></li>
-                    <li><a href="#">Life Style</a></li>
-                </ul>
-                <a href="#">
-                    <h4>Portable latest Fashion for young women</h4>
-                </a>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore.
-                </p>
-                <p class="post-date">
-                    31st January, 2018
-                </p>
-            </div>
-            <div class="col-lg-6 col-md-6 single-blog">
-                <img class="img-fluid" src="/dist/pages/guest/img/b2.jpg" alt="">
-                <ul class="post-tags">
-                    <li><a href="#">Travel</a></li>
-                    <li><a href="#">Life Style</a></li>
-                </ul>
-                <a href="#">
-                    <h4>Portable latest Fashion for young women</h4>
-                </a>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore.
-                </p>
-                <p class="post-date">
-                    31st January, 2018
-                </p>
-            </div>
+            @if ($posts->count())
+                @foreach ($posts as $post)
+                    <div class="col-lg-6 col-md-6 single-blog">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <img class="embed-responsive-item" src="/dist/images/{{ $post->image }}" alt="">
+                        </div>
+                        <ul class="post-tags">
+                            <li><a href="#">{{ $post->category->name }}</a></li>
+                        </ul>
+                        <a href="#">
+                            <h4>{{ $post->title }}</h4>
+                        </a>
+                        <p>
+                            {{ $post->excerpt }}
+                        </p>
+                        <p class="post-date">
+                            {{ date('D M, Y', strtotime($post->created_at)) }}
+                        </p>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-lg-12 d-flex justify-content-center single-menu">
+                    <p>No posts yet.</p>
+                </div>
+            @endif
         </div>
     </div>
 </section>
