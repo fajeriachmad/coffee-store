@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="/dist/pages/dashboard/css/dashboard.css">
 
     <script src="/assets/js/jquery/jquery.slim.min.js"></script>
-    <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -22,7 +22,7 @@
             @include('partials.dashboard.sidebar')
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-                @yield('container')
+                @yield('section')
             </main>
         </div>
     </div>
