@@ -7,6 +7,7 @@ use App\Models\Post;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class DashboardPostController extends Controller
@@ -19,7 +20,7 @@ class DashboardPostController extends Controller
     public function index()
     {
         return view('pages.dashboard.posts.index', [
-            'posts' => Post::get()
+            'categories' => Category::all()
         ]);
     }
 
@@ -30,10 +31,7 @@ class DashboardPostController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.posts.form', [
-            'action' => 'create',
-            'categories' => Category::all()
-        ]);
+        // 
     }
 
     /**
@@ -44,24 +42,44 @@ class DashboardPostController extends Controller
      */
     public function store(Request $request)
     {
-        $validated_data = $request->validate([
-            'title' => 'required',
-            'slug' => 'required',
-            'category_id' => 'required',
+        $rules = [
+            'title' => 'required|min:5',
+            'slug' => 'required|min:5',
+            'category_id' => 'required|integer',
             'image' => 'required|image|file|max:1024',
-            'body' => 'required'
-        ]);
+            'body' => 'required|min:20'
+        ];
 
-        if ($request->file('image')) {
-            $validated_data['image'] = $request->file('image')->store('/posts', 'public_images');
-        }
+        $messages =  [
+            'category_id.integer' => 'Please select a category.',
+            'image.required' => 'Please select an image.',
+            'image.image' => 'Please select a valid image.',
+            'image.file' => 'Please select a valid image.',
+            'image.max' => 'Maximum image size is 1MB.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validated_data = $request->all();
 
         $validated_data['user_id'] = auth()->user()->id;
         $validated_data['excerpt'] = Str::limit(strip_tags($request->body), 200);
 
-        Post::create($validated_data);
-
-        return redirect('/dashboard/posts')->with('success', 'New post has been added!');
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->getMessageBag(),
+            ]);
+        } else {
+            if ($request->file('image')) {
+                $validated_data['image'] = $request->file('image')->store('/', 'public_post_images');
+            }
+            Post::create($validated_data);
+            return response()->json([
+                'status' => 200,
+                'message' => 'New post has been added!'
+            ]);
+        }
     }
 
     /**
@@ -85,10 +103,9 @@ class DashboardPostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('pages.dashboard.posts.form', [
-            'action' => 'edit',
-            'post' => $post,
-            'categories' => Category::all()
+        return response()->json([
+            'status' => 200,
+            'data' => $post
         ]);
     }
 
@@ -102,30 +119,62 @@ class DashboardPostController extends Controller
     public function update(Request $request, Post $post)
     {
         $rules = [
-            'title' => 'required|max:255',
-            'category_id' => 'required',
-            'image' => 'image|file|max:1024',
-            'body' => 'required'
+            'title' => 'required|min:5',
+            'category_id' => 'required|integer',
+            'body' => 'required|min:20'
         ];
 
         if ($request->slug != $post->slug) {
             $rules['slug'] = 'required|unique:posts';
         }
 
-        $validated_data = $request->validate($rules);
-
         if ($request->file('image')) {
-            if ($request->oldImage) {
-                Storage::disk('public_images')->delete($request->oldImage);
+            if ($request->old_image != $request->image) {
+                $rules['image'] = 'image|file|max:1024';
             }
-            $validated_data['image'] = $request->file('image')->store('/posts', 'public_images');
+        }
+
+        $messages = [
+            'category_id.integer' => 'Please select a category.',
+            'image.image' => 'Please select a valid image.',
+            'image.file' => 'Please select a valid image.',
+            'image.max' => 'Maximum image size is 1MB.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validated_data =
+            [
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'category_id' => $request->category_id,
+                'body' => $request->body
+            ];
+
+        if ($request->old_image == $request->image) {
+            $validated_data['image'] = $request->old_image;
         }
 
         $validated_data['excerpt'] = Str::limit(strip_tags($request->body), 200);
 
-        Post::where('id', $post->id)->update($validated_data);
-
-        return redirect('/dashboard/posts')->with('success', 'Post has been updated!');
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->getMessageBag()
+            ]);
+        } else {
+            if ($request->file('image')) {
+                if ($request->old_image) {
+                    Storage::disk('public_post_images')->delete($request->old_image);
+                }
+                $validated_data['image'] = $request->file('image')->store('/', 'public_post_images');
+            }
+            Post::where('id', $post->id)->update($validated_data);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Post has been updated!'
+            ]);
+        }
     }
 
     /**
@@ -137,12 +186,30 @@ class DashboardPostController extends Controller
     public function destroy(Post $post)
     {
         if ($post->image) {
-            Storage::disk('public_images')->delete($post->image);
+            Storage::disk('public_post_images')->delete($post->image);
         }
 
         Post::destroy($post->id);
 
-        return redirect('/dashboard/posts')->with('success', 'Post has been deleted!');
+        return response()->json([
+            'status' => 200,
+            'message' => 'Post has been deleted!'
+        ]);
+    }
+
+    public function getPosts()
+    {
+        $posts = Post::all()->map(
+            function ($post, $index) {
+                return ([
+                    'no' => $index + 1,
+                    'slug' => $post->slug,
+                    'title' => $post->title,
+                    'category' => $post->category->name
+                ]);
+            }
+        );
+        return response()->json(['data' => $posts]);
     }
 
     public function checkSlug(Request $request)
