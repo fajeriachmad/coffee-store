@@ -32,5 +32,6 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('role:superadmin,admin');
 
 Route::get('/dashboard/posts/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('role:superadmin,admin');
+Route::get('/dashboard/posts/getPosts', [DashboardPostController::class, 'getPosts'])->middleware('role:superadmin,admin');
 Route::post('/dashboard/posts/attachImage', [DashboardPostController::class, 'attachImage'])->middleware('role:superadmin,admin');
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('role:superadmin,admin');
